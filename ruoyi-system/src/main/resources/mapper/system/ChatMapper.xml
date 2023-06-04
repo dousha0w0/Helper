@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.ChatMapper">
+    
+    <resultMap type="Chat" id="ChatResult">
+        <result property="chatId"    column="chat_id"    />
+        <result property="username"    column="username"    />
+        <result property="userKey"    column="user_key"    />
+        <result property="model"    column="model"    />
+        <result property="prompt"    column="prompt"    />
+        <result property="answer"    column="answer"    />
+        <result property="isEnd"    column="is_end"    />
+        <result property="requestIpAddress"    column="request_ip_address"    />
+        <result property="responseJson"    column="response_json"    />
+        <result property="promptId"    column="prompt_id"    />
+        <result property="finishReason"    column="finish_reason"    />
+        <result property="requestUrl"    column="request_url"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="requestTime"    column="request_time"    />
+        <result property="maxTokens"    column="max_tokens"    />
+        <result property="temperature"    column="temperature"    />
+        <result property="threadName"    column="thread_name"    />
+    </resultMap>
+
+    <sql id="selectChatVo">
+        select chat_id, username, user_key, model, prompt, answer, is_end, request_ip_address, response_json, prompt_id, finish_reason, request_url, create_time, request_time, max_tokens, temperature, thread_name from chat
+    </sql>
+
+    <select id="selectChatList" parameterType="Chat" resultMap="ChatResult">
+        <include refid="selectChatVo"/>
+        <where>  
+            <if test="username != null  and username != ''"> and username like concat('%', #{username}, '%')</if>
+            <if test="userKey != null  and userKey != ''"> and user_key = #{userKey}</if>
+            <if test="model != null  and model != ''"> and model = #{model}</if>
+            <if test="prompt != null  and prompt != ''"> and prompt = #{prompt}</if>
+            <if test="answer != null  and answer != ''"> and answer = #{answer}</if>
+            <if test="isEnd != null "> and is_end = #{isEnd}</if>
+            <if test="requestIpAddress != null  and requestIpAddress != ''"> and request_ip_address = #{requestIpAddress}</if>
+            <if test="responseJson != null  and responseJson != ''"> and response_json = #{responseJson}</if>
+            <if test="promptId != null  and promptId != ''"> and prompt_id = #{promptId}</if>
+            <if test="finishReason != null  and finishReason != ''"> and finish_reason = #{finishReason}</if>
+            <if test="requestUrl != null  and requestUrl != ''"> and request_url = #{requestUrl}</if>
+            <if test="requestTime != null "> and request_time = #{requestTime}</if>
+            <if test="maxTokens != null "> and max_tokens = #{maxTokens}</if>
+            <if test="temperature != null "> and temperature = #{temperature}</if>
+            <if test="threadName != null  and threadName != ''"> and thread_name like concat('%', #{threadName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectChatByChatId" parameterType="String" resultMap="ChatResult">
+        <include refid="selectChatVo"/>
+        where chat_id = #{chatId}
+    </select>
+        
+    <insert id="insertChat" parameterType="Chat" useGeneratedKeys="true" keyProperty="chatId">
+        insert into chat
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="username != null and username != ''">username,</if>
+            <if test="userKey != null and userKey != ''">user_key,</if>
+            <if test="model != null and model != ''">model,</if>
+            <if test="prompt != null and prompt != ''">prompt,</if>
+            <if test="answer != null and answer != ''">answer,</if>
+            <if test="isEnd != null">is_end,</if>
+            <if test="requestIpAddress != null and requestIpAddress != ''">request_ip_address,</if>
+            <if test="responseJson != null">response_json,</if>
+            <if test="promptId != null and promptId != ''">prompt_id,</if>
+            <if test="finishReason != null">finish_reason,</if>
+            <if test="requestUrl != null">request_url,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="requestTime != null">request_time,</if>
+            <if test="maxTokens != null">max_tokens,</if>
+            <if test="temperature != null">temperature,</if>
+            <if test="threadName != null">thread_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="username != null and username != ''">#{username},</if>
+            <if test="userKey != null and userKey != ''">#{userKey},</if>
+            <if test="model != null and model != ''">#{model},</if>
+            <if test="prompt != null and prompt != ''">#{prompt},</if>
+            <if test="answer != null and answer != ''">#{answer},</if>
+            <if test="isEnd != null">#{isEnd},</if>
+            <if test="requestIpAddress != null and requestIpAddress != ''">#{requestIpAddress},</if>
+            <if test="responseJson != null">#{responseJson},</if>
+            <if test="promptId != null and promptId != ''">#{promptId},</if>
+            <if test="finishReason != null">#{finishReason},</if>
+            <if test="requestUrl != null">#{requestUrl},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="requestTime != null">#{requestTime},</if>
+            <if test="maxTokens != null">#{maxTokens},</if>
+            <if test="temperature != null">#{temperature},</if>
+            <if test="threadName != null">#{threadName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateChat" parameterType="Chat">
+        update chat
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="username != null and username != ''">username = #{username},</if>
+            <if test="userKey != null and userKey != ''">user_key = #{userKey},</if>
+            <if test="model != null and model != ''">model = #{model},</if>
+            <if test="prompt != null and prompt != ''">prompt = #{prompt},</if>
+            <if test="answer != null and answer != ''">answer = #{answer},</if>
+            <if test="isEnd != null">is_end = #{isEnd},</if>
+            <if test="requestIpAddress != null and requestIpAddress != ''">request_ip_address = #{requestIpAddress},</if>
+            <if test="responseJson != null">response_json = #{responseJson},</if>
+            <if test="promptId != null and promptId != ''">prompt_id = #{promptId},</if>
+            <if test="finishReason != null">finish_reason = #{finishReason},</if>
+            <if test="requestUrl != null">request_url = #{requestUrl},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="requestTime != null">request_time = #{requestTime},</if>
+            <if test="maxTokens != null">max_tokens = #{maxTokens},</if>
+            <if test="temperature != null">temperature = #{temperature},</if>
+            <if test="threadName != null">thread_name = #{threadName},</if>
+        </trim>
+        where chat_id = #{chatId}
+    </update>
+
+    <delete id="deleteChatByChatId" parameterType="String">
+        delete from chat where chat_id = #{chatId}
+    </delete>
+
+    <delete id="deleteChatByChatIds" parameterType="String">
+        delete from chat where chat_id in 
+        <foreach item="chatId" collection="array" open="(" separator="," close=")">
+            #{chatId}
+        </foreach>
+    </delete>
+</mapper>

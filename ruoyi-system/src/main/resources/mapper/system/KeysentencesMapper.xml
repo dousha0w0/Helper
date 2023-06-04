@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.KeysentencesMapper">
+    
+    <resultMap type="Keysentences" id="KeysentencesResult">
+        <result property="id"    column="id"    />
+        <result property="keywords"    column="keywords"    />
+    </resultMap>
+
+    <sql id="selectKeysentencesVo">
+        select id, keywords from keysentences
+    </sql>
+
+    <select id="selectKeysentencesList" parameterType="Keysentences" resultMap="KeysentencesResult">
+        <include refid="selectKeysentencesVo"/>
+        <where>  
+            <if test="keywords != null  and keywords != ''"> and keywords = #{keywords}</if>
+        </where>
+    </select>
+    
+    <select id="selectKeysentencesById" parameterType="Long" resultMap="KeysentencesResult">
+        <include refid="selectKeysentencesVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertKeysentences" parameterType="Keysentences" useGeneratedKeys="true" keyProperty="id">
+        insert into keysentences
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="keywords != null">keywords,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="keywords != null">#{keywords},</if>
+         </trim>
+    </insert>
+
+    <update id="updateKeysentences" parameterType="Keysentences">
+        update keysentences
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="keywords != null">keywords = #{keywords},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteKeysentencesById" parameterType="Long">
+        delete from keysentences where id = #{id}
+    </delete>
+
+    <delete id="deleteKeysentencesByIds" parameterType="String">
+        delete from keysentences where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

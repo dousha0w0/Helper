@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.LessonMapper">
+    
+    <resultMap type="Lesson" id="LessonResult">
+        <result property="id"    column="id"    />
+        <result property="video"    column="video"    />
+        <result property="name"    column="name"    />
+        <result property="description"    column="description"    />
+        <result property="teacherName"    column="teacher_name"    />
+        <result property="cover"    column="cover"    />
+        <result property="classification"    column="classification"    />
+    </resultMap>
+
+    <sql id="selectLessonVo">
+        select id, video, name, description, teacher_name, cover, classification from lesson
+    </sql>
+
+    <select id="selectLessonList" parameterType="Lesson" resultMap="LessonResult">
+        <include refid="selectLessonVo"/>
+        <where>  
+            <if test="video != null  and video != ''"> and video = #{video}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="description != null  and description != ''"> and description = #{description}</if>
+            <if test="teacherName != null  and teacherName != ''"> and teacher_name like concat('%', #{teacherName}, '%')</if>
+            <if test="cover != null  and cover != ''"> and cover = #{cover}</if>
+            <if test="classification != null  and classification != ''"> and classification = #{classification}</if>
+        </where>
+    </select>
+    
+    <select id="selectLessonById" parameterType="Long" resultMap="LessonResult">
+        <include refid="selectLessonVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertLesson" parameterType="Lesson">
+        insert into lesson
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="video != null and video != ''">video,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="description != null">description,</if>
+            <if test="teacherName != null">teacher_name,</if>
+            <if test="cover != null and cover != ''">cover,</if>
+            <if test="classification != null and classification != ''">classification,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="video != null and video != ''">#{video},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="description != null">#{description},</if>
+            <if test="teacherName != null">#{teacherName},</if>
+            <if test="cover != null and cover != ''">#{cover},</if>
+            <if test="classification != null and classification != ''">#{classification},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLesson" parameterType="Lesson">
+        update lesson
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="video != null and video != ''">video = #{video},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="teacherName != null">teacher_name = #{teacherName},</if>
+            <if test="cover != null and cover != ''">cover = #{cover},</if>
+            <if test="classification != null and classification != ''">classification = #{classification},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteLessonById" parameterType="Long">
+        delete from lesson where id = #{id}
+    </delete>
+
+    <delete id="deleteLessonByIds" parameterType="String">
+        delete from lesson where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
