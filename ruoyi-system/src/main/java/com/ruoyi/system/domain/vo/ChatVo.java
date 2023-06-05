@@ -1,7 +1,6 @@
 package com.ruoyi.system.domain.vo;
 
 import com.ruoyi.system.domain.Chat;
-import com.sun.xml.internal.ws.developer.Serialization;
 import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 
@@ -58,6 +57,5 @@ public class ChatVo implements Serializable {
         return chatVoList;
     }
 
-    @Serialization
     private static final long serialVersionUID = 1L;
 }
